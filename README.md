@@ -1,10 +1,15 @@
 # Cascaded_Inference
-This project provides the code and the instructions for reproducing the Imagenet experiments from the article "Dynamicaly Sacrificing Accuracy for Reduced Computation: Cascaded Inference based on Softmax Confidence"
+This project provides the code and the instructions for reproducing the Imagenet experiments from the article "Dynamicaly Sacrificing Accuracy for Reduced Computation: Cascaded Inference based on Softmax Confidence". The excel file "MAC_count_calculations.xlsx" contains the analytical computations of the multiply-accumulate (MAC) operations of the ResNet models that where involved in the experiments.
+
 ## Requirements
-1) python 3.6
-2) tensorflow 1.12
-3) numpy
-4) matplotlib
+```
+python 3.6
+tensorflow 1.12
+numpy
+matplotlib
+progressbar
+pickle
+```
 ## Step 1 - Getting the sources
 Run the following commands to clone the sources and to download the pre-trained official Imagenet model
 ```
