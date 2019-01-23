@@ -1,4 +1,4 @@
-export IMAGENET_HOME=/data/datasets/Imagenet
+#export IMAGENET_HOME=/data/datasets/Imagenet
 # Setup folders
 mkdir -p $IMAGENET_HOME/validation
 mkdir -p $IMAGENET_HOME/train
