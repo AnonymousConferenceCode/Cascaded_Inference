@@ -72,7 +72,7 @@ Classifier 2:
  Test top-1:0.7651
  Test top-5:0.9321
  ```
-This should correspond to the reported accuracies in columns 2-4 of table 3 of our article.
+The above accuracies correspond to the reported accuracies in columns 2-4 of table 3 of our article.
 
 ## Step 5 - Find confidence thresholds 
 Run the following program to determine confidence thresholds (which will be stored to log files) for 21 diffrent epsilon values.
@@ -83,15 +83,15 @@ mkdir Logs/IMAGENET_Resnet50_Logs_with_cst_deltas_top5
 python find_deltas_given_imagenet_cst_softmax_dumps.py -dataset_path $IMAGENET_HOME -softmax_path ../TF_Models/official/resnet/output_softmax -output_dir Logs/IMAGENET_Resnet50_Logs_with_cst_deltas_top1
 python find_deltas_given_imagenet_cst_softmax_dumps.py -dataset_path $IMAGENET_HOME -softmax_path ../TF_Models/official/resnet/output_softmax -output_dir Logs/IMAGENET_Resnet50_Logs_with_cst_deltas_top5 --top5
 ```
-## Evaluate the cascaded inference performance, produce plots!
-The following code produces the figures 4.d and 4.e from our article.
+## Step 6 - Evaluate the cascaded inference performance, produce plots!
+The following code produces the figures 4.d and 4.e from our article. It is done by evaluating the softmax dumps of the cascade, with respect to the confidence threshold values that were found in the previous step.
 ```
 mkdir output_log_processing
 python gradual_log_driven.py -dataset_path $IMAGENET_HOME -softmax_path ../TF_Models/official/resnet/output_softmax
 python gradual_log_driven.py -dataset_path $IMAGENET_HOME -softmax_path ../TF_Models/official/resnet/output_softmax --top5
 ```
 At the end of the quick evaluation, check the "output_log_processing" directory where you will be able to find the figures.
-## Evaluate softmax as a confidence measure
+## Step 7 - Evaluate softmax as a confidence measure
 This code produces the figure 5.d from section 7.
 ```
 python gradual_log_driven_reliable_map.py -dataset_path $IMAENET_HOME -softmax_path ../TF_Models/official/resnet/output_softmax
