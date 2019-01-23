@@ -1,29 +1,4 @@
 '''
-This script reads the results of the hiera2 and hiera3 
-script runs for different networks. Next, the script
-finds for each network the sequence r[k] defined as 
-follows:
-
-           sum of all the network's correct outputs 
-           with confidence between (k-1)*Bw and k*B_w
-    r[k] = -----------------------------------------------
-           sum of all the network's outputs 
-           with confidence between (k-1)*Bw and k*B_w
-
-for each network the sequence alpha_r[k] defined as
-follows:
-
-                    sum of all the network's correct outputs
-                    with confidence above (k)*Bw
-    alpha_r[k] =    -----------------------------------------------
-                    sum of all the network's outputs
-                    with confidence above (k)*Bw
-
-where B_w is a bin width defined as a hyperparameter.
-
-Notes:
-    1) The whole "reliable map" analysis is based on Top-1
-       hence no top-5 is checked.
 
 Anonymized Source Code
 '''
@@ -40,10 +15,9 @@ ld = logging.debug
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Reads the softmax dumps and finds confidence'
-                    'threshold triplets (delta0,delta1,delta2) that correspond '
-                    'to a wide range of epsilons. Each of these triplets is saved in a '
-                    'Logs directory in a text file "log_resnet50_epsilon<e>.txt".')
+        description='Reads the softmax dumps and evaluates the accuracy '
+                    'of the three classifiers in a cascade, as a function of confidnce'
+                    'saves a figure containing bars and lines in the same drawing.')
     parser.add_argument('-dataset_path', type=str,
                         default='/data/datasets/Imagenet',
                         help='a path to an Imagenet directory, where a "tf_records" '

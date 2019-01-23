@@ -33,10 +33,8 @@ ld = logging.debug
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
-        description='Reads the softmax dumps and finds confidence'
-                    'threshold triplets (delta0,delta1,delta2) that correspond '
-                    'to a wide range of epsilons. Each of these triplets is saved in a '
-                    'Logs directory in a text file "log_resnet50_epsilon<e>.txt".')
+        description='Reads the softmax dumps and the confidence levels from the log files'
+                    'produces plots with accuracy as a function of a MAC count.')
     parser.add_argument('-dataset_path', type=str,
                         default='/data/datasets/Imagenet',
                         help='a path to an Imagenet directory, where a "tf_records" '
