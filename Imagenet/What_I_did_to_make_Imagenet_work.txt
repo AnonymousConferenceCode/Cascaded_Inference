@@ -1,0 +1,58 @@
+Requirements: 
+1) set $IMAGENET_HOME = "/data/datasets/Imagenet"
+2) have access to the imagenet tarballs.
+3) Have python 3.6 with tensorflow 1.12 installed
+4) Have CUDA, and preferably 4 GPUs
+
+
+
+
+
+
+Reproduction of the results on Imagenet:
+1) Download imagenet train and validation tarballs:
+	 ILSVRC2012_img_train.tar
+	 ILSVRC2012_img_val.tar
+   and place them under $IMAGENET_HOME
+2) from the tpu repository, copy tpu/tools/datasets/imagenet_to_gcs.py to the $IMAGENET_HOME
+3) edit the top line in the preprocess_imagenet.sh
+4) ./preprocess_imagenet.sh
+	
+	TODO: maybe clone the models project here   
+	
+5) Get the tensorflow model repository and download pretrained official checkpoint files for resnet50v2:
+   cd ~
+   git clone https://github.com/tensorflow/models.git TF_Models
+   cd ~/TF_Models/official/resnet/checkpoints
+   mkdir clf0
+   mkdir clf1
+   mkdir clf2
+   wget http://download.tensorflow.org/models/official/20181001_resnet/checkpoints/resnet_imagenet_v2_fp32_20181001.tar.gz
+   tar -xvf resnet_imagenet_v2_fp32_20181001.tar.gz
+   rm resnet_imagenet_v2_fp32_20181001.tar.gz
+   cd ..
+   
+6) Train/evaluate commands for a 4-gpu machine:
+   Run the cascaded inference from the 
+   6.1) To evaluate the clf2 only. At the end of the run the evaluation is performed and the softamx dumps are created:
+   python3 imagenet_main.py --eval_only --is_cascaded --classifier_id 2 --data_format channels_first -rv 2 -rs 50 -md checkpoints/clf2 -pmcp checkpoints/resnet_imagenet_v2_fp32_20181001 --data_dir /data/datasets/Imagenet/tf_records --num_gpus 4
+   
+   6.2) To fine-tune the clf-0 branch only (for 2 epochs).
+        At the end of the run the evaluation is performed and the softamx dumps are created:
+   python3 imagenet_main.py --te 2 --is_cascaded --classifier_id 0 --data_format channels_first -rv 2 -rs 50 -md checkpoints/clf0 -pmcp checkpoints/resnet_imagenet_v2_fp32_20181001 --data_dir /data/datasets/Imagenet/tf_records --num_gpus 4
+   
+   6.3) To fine-tune the clf-1 branch only (for 2 epochs).
+	    At the end of the run the evaluation is performed and the softamx dumps are created:
+   python3 imagenet_main.py --te 2 --is_cascaded --classifier_id 0 --data_format channels_first -rv 2 -rs 50 -md checkpoints/clf1 -pmcp checkpoints/resnet_imagenet_v2_fp32_20181001 --data_dir /data/datasets/Imagenet/tf_records --num_gpus 4
+   
+7) TODO continue filling the actual training and evaluation lines
+8) In order to begin finetuning clf0 or clf1 from the official checkpoint:
+   8.1) use the -pmcp <path_to_official_resnet50v2_checkpoint>
+   8.2) use the -md <model_dir_of_chekpoints_path>
+   This option will avoid trials of loading the non existing "cascaded" weights from the 
+9) in order to resume training from the checkpoint which was already trained by finetuining the
+   official resnet50v2 weights as described above:
+   9.1) do not use the -pmcp option
+   9.2) use the -md <model_dir_which_was_used_by _you_in_step_8.2_above>
+
+   
