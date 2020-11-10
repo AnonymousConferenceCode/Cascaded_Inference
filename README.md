@@ -1,6 +1,8 @@
 # Cascaded_Inference
 This project provides the code and the instructions for reproducing the Imagenet experiments from the article "Dynamicaly Sacrificing Accuracy for Reduced Computation: Cascaded Inference based on Softmax Confidence". The excel file "MAC_count_calculations.xlsx" contains the analytical computations of the multiply-accumulate (MAC) operations of the ResNet models that where involved in the experiments.
 
+![A high level block diagram of a deep neural net based image classifier, split into 3 stages](HighLevel.PNG)
+
 ## Requirements
 ```
 python 3.6
